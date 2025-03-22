@@ -1,6 +1,8 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Net;
+using TMPro;
 using UnityEngine;
 
 public class Player : MonoBehaviour
@@ -22,16 +24,30 @@ public class Player : MonoBehaviour
     public Action OnPowerUpStart;
     public Action OnPowerUpStop;
 
+    private bool _isPowerUpActive;
+
+    [SerializeField]
+    private Transform _respawnPoint;
+
+    [SerializeField]
+    private int _health;
+
+    [SerializeField]
+    private TMP_Text _healthText;
+
     private IEnumerator StartPowerUp()
     {
+        _isPowerUpActive = true;
+
         if(OnPowerUpStart!=null)
         {
             OnPowerUpStart();
         }
-
         Debug.Log("Start power up");
+        
         yield return new WaitForSeconds(_powerupDuration);
-
+         _isPowerUpActive = false;
+       
         if(OnPowerUpStop!=null)
         {
             OnPowerUpStop();
@@ -46,6 +62,7 @@ public class Player : MonoBehaviour
 
     private void Start()
     {
+        UpdateUI();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
@@ -78,5 +95,36 @@ public class Player : MonoBehaviour
         }
 
         _powerupCoroutine = StartCoroutine(StartPowerUp());
+    }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(_isPowerUpActive)
+        {
+          if(collision.gameObject.CompareTag("Enemy"))
+          {
+               collision.gameObject.GetComponent<Enemy>().Dead();
+          }
+        }
+    }
+
+    private void UpdateUI()
+    {
+        _healthText.text = "Health:" + _health;
+    }
+
+    public void Dead()
+    {
+        _health -= 1;
+        
+        if(_health > 0)
+        {
+            transform.position = _respawnPoint.position;
+
+        } else {
+            _health = 0;
+            Debug.Log("Lose");
+        }
+        UpdateUI();
     }
 }

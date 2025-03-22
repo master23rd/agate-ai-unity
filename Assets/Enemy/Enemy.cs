@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -25,15 +26,19 @@ public class Enemy : MonoBehaviour
      public RetreatState RetreatState = new RetreatState();
 
     //public object Animator { get; internal set; }
-
+    [HideInInspector]
+    public Animator Animator;
+    
     private void Awake() 
      {
           //make patrol default state
+           Animator = GetComponent<Animator>();
           _currentState = PatrolState;
           _currentState.EnterState(this); 
 
           //activate navMeshAgent
           NavMeshAgent = GetComponent<NavMeshAgent>();
+    
      }
 
     private void Start()
@@ -72,4 +77,20 @@ public class Enemy : MonoBehaviour
      {
           SwitchState(PatrolState);
      }
+
+     public void Dead()
+     {
+          Destroy(gameObject);
+     }
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if(_currentState != RetreatState)
+        {
+          if(collision.gameObject.CompareTag("Player"))
+          {
+               collision.gameObject.GetComponent<Player>().Dead();
+          }
+        }
+    }
 }

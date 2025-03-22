@@ -9,6 +9,10 @@ public class PickableManager : MonoBehaviour
     [SerializeField]
     private Player _player;
 
+    [SerializeField]
+    //call ScoreManager class (initiate scoreManager)
+    private ScoreManager _scoreManager;
+
     // Start is called before the first frame update`
     void Start()
     {
@@ -25,11 +29,16 @@ public class PickableManager : MonoBehaviour
         }
 
         Debug.Log("Pickable List "+ _pickableList.Count);
+        _scoreManager.SetMaxScore(_pickableList.Count);
     }
 
     private void OnPickablePicked(Pickable pickable)
     {
         _pickableList.Remove(pickable);
+        if(_scoreManager !=null)
+        {
+            _scoreManager.AddScore(1);
+        }
         Destroy(pickable.gameObject);
         Debug.Log("Pickable List "+ _pickableList.Count);
 
@@ -43,5 +52,6 @@ public class PickableManager : MonoBehaviour
         {
             _player?.PickPowerUp();
         }
+
     }
 }

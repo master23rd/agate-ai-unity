@@ -12,7 +12,10 @@ public class PatrolState : BaseState
     {
         //default player? moving is false or idle
         _isMoving = false;
+        enemy.Animator.SetTrigger("PatrolState");
         // Debug.Log("start patrol");
+
+        
     }
 
     public void UpdateState(Enemy enemy)
