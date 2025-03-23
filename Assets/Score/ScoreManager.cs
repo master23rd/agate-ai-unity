@@ -18,6 +18,7 @@ public class ScoreManager : MonoBehaviour
     public void SetMaxScore(int value)
     {
         _maxScore = value;
+        Debug.Log("Score is" + value);
         UpdateUI();
     }
 
@@ -30,14 +31,14 @@ public class ScoreManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _score = 0;
-        _maxScore = 0;
         UpdateUI();
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    // Running during initiate
+    // void Awake()
+    // {
+    //     _score = 0;
+    //     _maxScore = 0;
+    //     UpdateUI();
+    // }
 }

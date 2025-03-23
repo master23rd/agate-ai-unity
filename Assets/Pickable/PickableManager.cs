@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PickableManager : MonoBehaviour
 {
@@ -28,6 +29,7 @@ public class PickableManager : MonoBehaviour
             pickableObjects[i].OnPicked += OnPickablePicked;
         }
 
+        //set maxScore based on pickable List
         Debug.Log("Pickable List "+ _pickableList.Count);
         _scoreManager.SetMaxScore(_pickableList.Count);
     }
@@ -45,6 +47,7 @@ public class PickableManager : MonoBehaviour
         if(_pickableList.Count <= 0)
         {
             Debug.Log("Win");
+            SceneManager.LoadScene("WinScreen");
         }
 
         //notes* PickableType is private, but tutorial sugest to include it - so I change it to public 
